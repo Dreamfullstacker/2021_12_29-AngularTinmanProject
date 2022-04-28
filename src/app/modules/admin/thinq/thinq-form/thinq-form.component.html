@@ -1,0 +1,30 @@
+<form [formGroup]="thinqForm">
+    <div class="grid grid-cols-12 gap-2 gap-x-4 w-full mb-8">
+        <ng-container *ngIf="fields; else baseTemplate">         
+            <ng-container *ngFor="let fieldUI of fields" class="col-span-12 sm:col-span-6">
+                <thinq-form-field 
+                    *ngIf="thinqForm.get(fieldUI.fieldName)"
+                    [control]="thinqForm.get(fieldUI.fieldName)" 
+                    [arrField]="arrFields[fieldUI.fieldName]"
+                    [ngClass]="generateCol(fieldUI, arrFields[fieldUI.fieldName].Type)"
+                    [txlIdField]="getTxlControl(fieldUI.fieldName)"
+                >
+                </thinq-form-field>
+            </ng-container>
+        </ng-container>
+        <ng-template #baseTemplate>
+            <ng-container *ngFor="let fieldKey of objectKeys(arrFields)" class="col-span-12 sm:col-span-6">
+                <thinq-form-field 
+                    [control]="thinqForm.get(fieldKey)"
+                    [arrField]="arrFields[fieldKey]"
+                    [ngClass]="{
+                        'col-span-6': !['txa','htm'].includes(arrFields[fieldKey].Type),
+                        'col-span-12': ['txa','htm'].includes(arrFields[fieldKey].Type)
+                    }"
+                >
+                </thinq-form-field>
+            </ng-container>
+        </ng-template>
+        
+    </div>
+</form>

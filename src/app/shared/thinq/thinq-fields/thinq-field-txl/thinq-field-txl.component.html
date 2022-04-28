@@ -1,0 +1,36 @@
+<mat-label 
+  *ngIf="labelVisibility" 
+  class="font-medium txl-label"
+>
+  {{arrField.Label}}
+</mat-label>
+<ng-select 
+  [ngClass]="{'mt-1': labelVisibility}"
+  [items]="fieldResult$ | async"
+  [hideSelected]="true"
+  [loading]="fieldLoading"
+  bindLabel="result"
+  [typeahead]="fieldInput$"
+  [formControl]="txlControl"
+  [placeholder]="'Type ' + arrField.Label"
+  [readonly]="arrField.ReadOnly"
+>
+  <ng-template ng-label-tmp let-item="item">
+    <div class="flex items-center">
+      <button
+        color="primary"
+        mat-icon-button
+        (click)="onOpenThinq()"
+        *ngIf="isThinq()"
+      >
+        <mat-icon [svgIcon]="'mat_solid:visibility'"></mat-icon>
+      </button>
+      <span>
+        {{getLabel(item)}}
+      </span>
+    </div>
+  </ng-template>
+  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+    <div><span [ngOptionHighlight]="search">{{item.result}}</span></div>
+  </ng-template>
+</ng-select>

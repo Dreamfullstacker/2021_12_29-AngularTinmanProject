@@ -1,0 +1,19 @@
+<form [formGroup]="searchForm">
+  <div class="grid grid-cols-7 items-center bg-card rounded gap-2 w-full p-2">
+    <ng-container *ngFor="let searchField of searchFields">
+      <thinq-form-field
+        class="col-span-5 md:col-span-1"
+        [control]="searchForm.get(getField(searchField.Label))"
+        [arrField]="searchField"
+      >
+      </thinq-form-field>
+    </ng-container>
+    <button
+      color="primary"
+      mat-flat-button
+      (click)="applyFilter()"
+    >
+      Apply filter
+    </button>
+  </div>
+</form>

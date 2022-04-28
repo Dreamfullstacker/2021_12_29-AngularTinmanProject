@@ -1,0 +1,24 @@
+<!-- Button -->
+<button
+  mat-flat-button
+  [matTooltip]="trackingTask"
+  (click)="onTimesheetClick()"
+>
+  <span 
+    class="flex items-center font-bold"
+    [ngClass]="[trackingTime ? 'text-blue-600' : 'text-gray-600']"
+  >
+    <ng-container *ngIf="trackingTime; else elseTemplate">
+      <mat-icon
+        [ngClass]="{'mr-2': trackingTime}"
+        [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <mat-icon
+        [ngClass]="{'mr-2': trackingTime}"
+        [svgIcon]="'heroicons_outline:clock'"></mat-icon>
+    </ng-template>
+    
+    {{ trackingTime }}
+  </span>
+</button>

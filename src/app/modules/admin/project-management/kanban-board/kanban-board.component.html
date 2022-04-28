@@ -1,0 +1,81 @@
+<div class="flex flex-col relative flex-auto min-w-0">
+  <!-- Loader -->
+
+  <ng-container *ngIf="(_isLoading$ | async) as _isLoading">
+    <div
+      class="absolute inset-x-0 top-0"
+      *ngIf="_isLoading">
+      <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    </div>
+  </ng-container>
+
+  <!-- Search -->
+  <pm-kanban-search [tasks]="_tasks" (searchEvent)="onSearchTask($event)"></pm-kanban-search>
+
+  <!-- Kanban -->
+  <!-- Main -->
+  <div
+    class="flex-auto p-2 sm:p-4 sm:pb-2 overflow-y-auto"
+    cdkScrollable
+    >
+
+    <!-- Lists -->
+    <div
+      class="flex h-full"
+      *ngIf="lists"
+    >
+
+      <!-- Group all cdkDropList's after this point together so that the cards can be transferred between lists -->
+      <div
+        class="flex h-full items-start"
+        cdkDropListGroup
+      >
+
+        <!-- List -->
+        <ng-container *ngFor="let status of objectKeys(lists);">
+          <div
+            class="flex flex-col flex-0 w-72 h-full p-2 mx-2 rounded-2xl bg-default"
+          >
+            <div
+              class="flex items-center justify-between"
+              cdkDragHandle
+            >
+              <div class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                {{ status }}
+              </div>
+              <div class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                {{ lists[status].length }}
+              </div>
+            </div>
+
+            <!-- Cards -->
+            <div class="overflow-y-auto rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
+              <div
+                class="p-3 pb-0"
+                cdkDropList
+                [cdkDropListData]="lists[status]"
+                (cdkDropListDropped)="cardDropped($event)"
+              >
+
+                <!-- Card -->
+                <ng-container *ngFor="let card of lists[status]; trackBy: trackByFn">
+                  <a
+                    class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
+                    cdkDrag
+                  >
+                    <!-- Title -->
+                    <div class="text-sm text-gray-600 font-medium leading-5">{{card.Project}}</div>
+                    <!-- Description -->
+                    <div class="w-full overflow-hidden text-base font-medium leading-5 card-content">
+                      {{card.Description}}
+                    </div>
+                  </a>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

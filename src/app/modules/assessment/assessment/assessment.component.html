@@ -1,0 +1,112 @@
+<div
+    class="relative flex flex-col w-full h-screen justify-between p-2 sm:p-4"
+    (swipe)="onSwipe($event)"
+    *transloco="let t"
+    id="maindiv"
+>
+    <div class="flex flex-col">
+        <!-- Out -->
+        <div class="flex w-full justify-end">
+            <div class="w-20 mx-auto">
+                <img src="assets/images/logo/kqlogo.png" />
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="answerIndex <= 60; else doneTemplate">
+        <div
+            class="absolute flex items-center justify-center backdrop-filter inset-0 backdrop-blur-sm z-10"
+            *ngIf="isLoading"
+        >
+            <mat-spinner></mat-spinner>
+        </div>
+        <!-- Assessment Header -->
+        <div class="flex flex-col">
+            <!-- Assessment Title -->
+            <div class="flex flex-col items-center" *ngIf="questions">
+                <!-- Logo -->
+                <div class="text-lg font-semibold">
+                    {{ getQuestionTitle() }}
+                </div>
+                <div class="text-lg">
+                    {{
+                        t("Remaining questions", {
+                            count: totalQuestions - answerIndex + 1
+                        })
+                    }}
+                </div>
+            </div>
+        </div>
+        <!-- Assessment Questions -->
+        <div class="flex justify-between" *ngIf="answerIndex <= 60">
+            <!-- Left Swipe - No -->
+            <div class="text-base hidden sm:flex">
+                <button
+                    class="fuse-mat-button-rounded bg-primary text-white"
+                    [matTooltip]="t('If you answer as No, Drag the mouse to left')"
+                    mat-icon-button
+                    (click)="onClickAnswer('no')"
+                >
+                    <mat-icon
+                        class="icon-size-5 text-white"
+                        [svgIcon]="'heroicons_solid:x'"
+                    ></mat-icon>
+                </button>
+            </div>
+            <!-- Question -->
+            <div
+                class="flex flex-col w-full text-center justify-center mb-24"
+                *ngIf="questions"
+            >
+                <div class="text-gray-400 text-2xl">
+                    {{ t("Are you interested in work that might include requiring you to") }}
+                </div>
+                <div class="text-gray-700 text-4xl">
+                    {{ getQuestion() }}
+                </div>
+            </div>
+            <!-- Right Swipe - Yes -->
+            <div class="text-base hidden sm:flex">
+                <button
+                    class="fuse-mat-button-rounded bg-primary text-white"
+                    [matTooltip]="t('If you answer as Yes, Drag the mouse to right')"
+                    mat-icon-button
+                    (click)="onClickAnswer('yes')"
+                >
+                    <mat-icon
+                        class="icon-size-5 text-white"
+                        [svgIcon]="'heroicons_solid:check'"
+                    ></mat-icon>
+                </button>
+            </div>
+        </div>
+        <!-- Assessment Back Button -->
+        <div class="flex justify-between" *ngIf="answerIndex <= 60">
+            <button
+                class="fuse-mat-button-rounded bg-primary text-white"
+                mat-flat-button
+                [disabled]="!canGoBack()"
+                (click)="onClickBack()"
+            >
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:arrow-left'"
+                ></mat-icon>
+                <span class="ml-1">{{ t("Back") }}</span>
+            </button>
+            <button
+                class="fuse-mat-button-rounded bg-primary text-white"
+                mat-flat-button
+                (click)="onQuit()"
+            >
+                <span class="mr-1">{{ t("Log Out") }}</span>
+                <mat-icon
+                    class="icon-size-5 text-white"
+                    [svgIcon]="'heroicons_outline:logout'"
+                ></mat-icon>
+            </button>
+        </div>
+    </ng-container>
+    <ng-template #doneTemplate>
+        <assessment-final></assessment-final>
+    </ng-template>
+</div>

@@ -1,0 +1,19 @@
+<mat-label 
+  *ngIf="labelVisibility" 
+  class="font-medium txl-label"
+>
+  {{arrField.Label}}
+</mat-label>
+<ng-select 
+  [ngClass]="{'mt-1': labelVisibility}"
+  [items]="arrField.Options"
+  bindValue="value"
+  [placeholder]="'Select Option'"
+  [clearable]="blnClearable"
+  [readonly]="arrField.ReadOnly"
+  [formControl]="control"
+>
+  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+    <div><span [ngOptionHighlight]="search">{{item.label}}</span></div>
+  </ng-template>
+</ng-select>

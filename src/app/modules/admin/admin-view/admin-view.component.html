@@ -1,0 +1,169 @@
+<div class="flex flex-col rounded min-w-0 h-full bg-card dark:bg-transparent">
+  <!-- Header -->
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between border-b">
+    <!-- Loader -->
+    <ng-container *ngIf="_isLoading">
+      <div
+        class="absolute inset-x-0 top-0"
+        *ngIf="_isLoading">
+        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+      </div>
+    </ng-container>
+    <!-- Title -->
+    
+    <!-- Header -->
+    <ng-container *ngIf="_data">
+      <app-cabinet-header  
+      *ngIf="_headerClass"
+      [title]="_cabinet" 
+      [subTitle]="_data.RowCount + ' results'"
+      [headerIcon]="_headerClass.Icon"
+      [headerClass]="_headerClass.CssClass"
+    ></app-cabinet-header>
+    </ng-container>
+    
+  </div>
+
+  <!-- Main -->
+  <div class="relative flex flex-col flex-auto overflow-hidden w-full rounded border" *ngIf="_data">
+    <div class="table-loading-shade" *ngIf="_isLoading">
+
+    </div>
+    <div class="flex justify-end mr-2">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon
+          class="icon-size-5"
+          matPrefix
+          [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="visible-menu">
+        <button mat-menu-item *ngFor="let col of _displayColumns; index as i;">
+          <mat-checkbox [(ngModel)]="_visibleColumns[col]" class="example-margin">{{col}}</mat-checkbox>
+        </button>
+      </mat-menu>
+    </div>
+    <div class="w-full overflow-auto">
+      <table mat-table [dataSource]="_data.Data" class="admin-table max-h-screen">
+        <!-- Number Column -->
+        
+        <ng-container *ngFor="let col of _displayColumns" [matColumnDef]="col" [sticky]="col === 'View'">
+          <ng-container *ngIf="_visibleColumns[col] === true">
+            <th 
+              mat-header-cell 
+              *matHeaderCellDef 
+              [ngStyle]="{
+                'min-width': _widthColumns[col] + 'px',
+                'max-width': _widthColumns[col] + 'px'
+              }"
+            >
+              <div class="group flex px-2 py-0 justify-between w-full border-b-1">
+                <ng-container *ngIf="col !== 'View'; else viewColTemplate">
+                  <ng-container *ngIf="!_filterVisible[col]; else filterTemplate">
+                    <span matSort (matSortChange)="sortCol($event)" [mat-sort-header]="col" #matSort class="flex items-center text-sm">
+                      {{col}}
+                    </span>
+                  </ng-container>
+                  <ng-template #filterTemplate>
+                    <mat-form-field class="fuse-mat-dense appearance-none fuse-mat-no-subscript min-w-22">
+                      <input
+                        matInput
+                        [placeholder]="'Search...'"
+                        [formControl]="_filterGroup.get(col)"
+                        [autocomplete]="'off'">
+                    </mat-form-field>
+                    <button
+                      [ngClass]="_filterGroup.get(col).value === '' ? 'opacity-0' : 'opacity-100'"
+                      class="ml-2 transition duration-150 ease-in-out flex items-center"
+                      [disabled]="_filterGroup.get(col).value === ''"
+                      [matMenuTriggerFor]="menu"
+                      mat-icon-button
+                    >
+                      <mat-icon [svgIcon]="'mat_solid:filter_alt'"></mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button 
+                        *ngFor="let item of _filterColumnOperators" 
+                        mat-menu-item 
+                        [ngClass]="{'text-blue-600': _filterQuery[col] !== undefined && _filterQuery[col] === item.value}"
+                        (click)="onFilterOption(item.value, col)"
+                      >
+                        {{item.label}}
+                      </button>
+                    </mat-menu>
+                  </ng-template>
+                  <button
+                    class="opacity-0 transition duration-150 ease-in-out flex items-center group-hover:opacity-100"
+                    (click)="_filterVisible[col] = !_filterVisible[col]"
+                    mat-icon-button
+                  >
+                    <mat-icon [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                  </button>
+                </ng-container>
+                <ng-template #viewColTemplate>
+                  <span class="flex items-center text-sm">
+                    {{col}}
+                  </span>
+                </ng-template>
+              </div>
+            </th>
+            <td 
+              mat-cell 
+              *matCellDef="let row" 
+              [ngStyle]="{
+                'min-width': _widthColumns[col] + 'px',
+                'max-width': _widthColumns[col] + 'px'
+              }"
+            >
+              <ng-container *ngIf="col !== 'View'; else actionTemplate">
+                <ng-container 
+                  *ngIf="selectedField && 
+                    (selectedField.appDataId === row['AppDataId'] && selectedField.fieldName === col); else viewTemplate">
+                  <thinq-form-field 
+                    [control]="getFieldControl(col)" 
+                    [arrField]="getArrField(col)"
+                    [txlIdField]="getTxlControl(col)"
+                    [labelVisibility]="false"
+                  >
+                  </thinq-form-field>
+                </ng-container>
+                <ng-template #viewTemplate>
+                  <div class="px-2 text-sm" (dblclick)="setEditMode(row['AppDataId'], col, index)">
+                    {{row[col]}}
+                  </div>
+                </ng-template>
+              </ng-container>
+              <ng-template #actionTemplate>
+                <button
+                  color="primary"
+                  mat-icon-button
+                  (click)="onOpenThinq(row['AppDataId'])"
+                >
+                  <mat-icon [svgIcon]="'mat_solid:visibility'"></mat-icon>
+                </button>
+                <button
+                  color="primary"
+                  mat-icon-button
+                  (click)="onUpdateField()"
+                  *ngIf="selectedField && row['AppDataId'] === selectedField.appDataId"
+                >
+                  <mat-icon [svgIcon]="'mat_solid:save'"></mat-icon>
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+        </ng-container>
+
+        <tr mat-header-row class="sticky top-0 z-10 bg-gray-100" *matHeaderRowDef="filterColumn()"></tr>
+        <tr 
+          mat-row 
+          *matRowDef="let row; columns: filterColumn() | paginate: {
+            id: 'server', itemsPerPage: _pagination.size, currentPage: _pagination.page, totalItems: _pagination.length }"
+          class="datatable-row"></tr>
+      </table>
+    </div>
+
+    <app-footer [pagination]="_pagination" [paginationConfig]="_paginationConfig" (paginationChanged)="paginationChanged($event)">
+
+    </app-footer>
+  </div>    
+</div>

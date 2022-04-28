@@ -1,0 +1,143 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+  <!-- Main -->
+  <div class="w-full flex flex-col p-4 bg-card max-w-screen-xl mx-auto">
+    <!-- First row: Total Information -->
+    <div class="flex">
+      <!-- Total Information  -->
+      <div class="hidden md:flex flex-col items-center w-1/3 bg-blue-400 text-white rounded-lg shadow">
+        <div class="flex flex-auto w-full items-center">
+          <span class="flex w-1/3 justify-end">
+            <mat-icon 
+              [inline]="true"
+              class="text-white w-10 h-10" svgIcon="heroicons_outline:users"
+            ></mat-icon>
+          </span>
+          <div class="w-2/3 flex flex-col p-2">
+            <span class="text-3xl font-medium tracking-tight leading-6 truncate">{{totalCustomer.length}}</span>
+            <span class="text-xl font-medium tracking-tight leading-6 truncate">Total Customer</span>
+          </div>
+        </div>
+        <div class="flex flex-auto w-full items-center">
+          <span class="flex w-1/3 justify-end">
+            <mat-icon 
+              [inline]="true"
+              class="text-white w-10 h-10" svgIcon="heroicons_outline:chart-bar"
+            ></mat-icon>
+          </span>
+          <div class="w-2/3 flex flex-col p-2">
+            <span class="text-3xl font-medium tracking-tight leading-6 truncate">{{totalOpportunity.length}}</span>
+            <span class="text-xl font-medium tracking-tight leading-6 truncate">Total Opportunity</span>
+          </div>
+        </div>
+        <div class="flex flex-auto w-full items-center">
+          <span class="flex w-1/3 justify-end">
+            <mat-icon 
+              [inline]="true"
+              class="text-white w-10 h-10" svgIcon="heroicons_outline:currency-dollar"
+            ></mat-icon>
+          </span>
+          <div class="w-2/3 flex flex-col p-2">
+            <span class="text-3xl font-medium tracking-tight leading-6 truncate">{{totalRevenue | shortNumber}}</span>
+            <span class="text-xl font-medium tracking-tight leading-6 truncate">Total Revenue</span>
+          </div>
+        </div>
+      </div>
+      <div class="ml-4 flex dark flex-col flex-auto bg-card shadow rounded-lg overflow-hidden w-2/3">
+        <!-- Revenue monthly charts -->
+        <div class="flex items-center justify-between mt-4 ml-4">
+          <div class="flex flex-col">
+            <span class="mr-4 text-2xl md:text-3xl font-semibold tracking-tight leading-7">Revenue Overview</span>
+            <span class="font-medium text-secondary">Revenue by monthly</span>
+          </div>
+        </div>
+        <div class="flex flex-col flex-auto h-40">
+          <apx-chart
+            class="flex-auto w-full h-full"
+            [chart]="chartRevenueByMonth.chart"
+            [colors]="chartRevenueByMonth.colors"
+            [dataLabels]="chartRevenueByMonth.dataLabels"
+            [fill]="chartRevenueByMonth.fill"
+            [grid]="chartRevenueByMonth.grid"
+            [series]="chartRevenueByMonth.series"
+            [stroke]="chartRevenueByMonth.stroke"
+            [tooltip]="chartRevenueByMonth.tooltip"
+            [xaxis]="chartRevenueByMonth.xaxis"
+            [yaxis]="chartRevenueByMonth.yaxis"></apx-chart>
+        </div>
+      </div>
+    </div>
+    <!-- Second Row: Active Opportunity  -->
+    <div class="grid grid-cols-5 gap-4 w-full mt-4">
+      <!-- Active Opportunity -->
+      <div class="col-span-1 grid grid-cols-2 gap-2 text-gray-600 h-full text-right">
+        <div class="bg-green-200 col-span-1 flex flex-col rounded justify-center items-end p-2">
+          <span>Active Opportunity</span>
+          <span class="font-bold text-3xl">{{activeOpportunity.length}}</span>
+        </div>
+        <div class="bg-blue-200 col-span-1 flex flex-col justify-center rounded items-end p-2">
+          Active Revenue
+          <span class="font-bold text-3xl">{{activeRevenue | shortNumber}}</span>
+        </div>
+        <div class="bg-yellow-200 col-span-1 flex flex-col justify-center rounded items-end p-2">
+          Average Budget
+          <span class="font-bold text-3xl">{{activeRevenue / activeOpportunity.length | shortNumber}}</span>
+        </div>
+        <div class="bg-red-200 col-span-1 flex flex-col justify-center rounded items-end p-2">
+          Win Rate
+          <span class="font-bold text-3xl">{{getWinRate()}}%</span>
+        </div>
+      </div>
+      <!-- Opportunity Count By Stage -->
+      <div class="col-span-3 flex flex-col bg-card shadow rounded">
+        <div class="flex flex-col">
+          <span class="p-4 text-2xl md:text-3xl font-semibold tracking-tight leading-7">Opportunity By Stage</span>
+          <apx-chart
+            [series]="chartOpportunityByStatus.series"
+            [chart]="chartOpportunityByStatus.chart"
+            [dataLabels]="chartOpportunityByStatus.dataLabels"
+            [plotOptions]="chartOpportunityByStatus.plotOptions"
+            [responsive]="chartOpportunityByStatus.responsive"
+            [xaxis]="chartOpportunityByStatus.xaxis"
+            [legend]="chartOpportunityByStatus.legend"
+            [fill]="chartOpportunityByStatus.fill"
+          ></apx-chart>
+        </div>
+      </div>
+      <!-- Opportunity Count -->
+      <div class="col-span-1 flex flex-col">
+        <div class="flex bg-card shadow rounded">
+          <!-- Sales funnel -->
+          <apx-chart
+            [series]="chartSalesFunnel.series"
+            [chart]="chartSalesFunnel.chart"
+            [dataLabels]="chartSalesFunnel.dataLabels"
+            [plotOptions]="chartSalesFunnel.plotOptions"
+            [xaxis]="chartSalesFunnel.xaxis"
+          ></apx-chart>
+        </div>
+        <div class="flex flex-auto bg-card shadow rounded mt-2">
+          <!-- Sales Country -->
+          <apx-chart
+            [series]="chartCustomerCountry.series"
+            [chart]="chartCustomerCountry.chart"
+            [labels]="chartCustomerCountry.labels"
+            [responsive]="chartCustomerCountry.responsive"
+          ></apx-chart>
+        </div>
+      </div>
+    </div>
+    <!-- Third Row: Lost, Potential Opportunity -->
+    <div class="flex">
+      <!-- Lost Opportunity -->
+      <div class="flex rounded">
+        
+      </div>
+      <!-- Potential Opportunity -->
+      <div class="flex rounded">
+        
+      </div>
+    </div>
+  </div>
+
+</div>

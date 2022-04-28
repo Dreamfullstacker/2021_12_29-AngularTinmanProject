@@ -1,0 +1,32 @@
+<div class="flex flex-col min-w-0 w-full items-center">
+  <div class="rounded px-8 pt-4 max-w-240 bg-card dark:bg-transparent">
+    <div class="text-xl md:text-2xl text-center mb-3 font-semibold tracking-tight leading-7 md:leading-snug truncate">
+      KONEQT Platform License Agreement (version {{licenseVersion}})
+    </div>
+    <div [innerHTML]="licenseHTML"></div>
+  </div>
+  <div class="action py-4 printHide">
+    <mat-checkbox color="primary" class="font-medium checkbox mb-2" [(ngModel)]="acceptControl">I agree with the terms of the license agreement</mat-checkbox>
+    <div class="flex justify-center">
+      <button
+        class="ml-2"
+        color="primary"
+        type="button"
+        mat-raised-button
+        (click)="printLicense()"
+      >
+        <span>Print</span>
+      </button>
+      <button
+        class="ml-2"
+        color="primary"
+        type="button"
+        [disabled]="!acceptControl"
+        mat-raised-button
+        (click)="acceptLicense()"
+      >
+        <span>Accept</span>
+      </button>
+    </div>
+  </div>
+</div>

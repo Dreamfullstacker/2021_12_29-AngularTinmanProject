@@ -1,0 +1,87 @@
+<div class="flex w-full h-12 items-center bg-gray-50">
+  <ng-container *ngIf="pagination; else buttonFooterTemplate">
+    <div class="flex items-center py-3 pl-5">
+      <div class="text-base text-center flex items-center mr-3">Items per page:</div>
+      <mat-form-field class="fuse-mat-no-subscript fuse-mat-dense w-20">
+        <mat-select [(ngModel)]="pagination.size" (ngModelChange)="pageSizeChanged($event)">
+          <mat-option 
+            *ngFor="let size of paginationConfig.paginationOptions"
+            [value]="size"
+          >
+            {{ size }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <pagination-controls 
+        id="server"
+        class="flex items-center"
+        [maxSize]="7"
+        [responsive]="true"
+        (pageChange)="getPage($event)"
+      >
+      </pagination-controls>
+    </div>
+  </ng-container>
+  <ng-template #buttonFooterTemplate>
+    <!-- CRUD buttons -->
+    <button
+      class="ml-2 text-green-600"
+      mat-stroked-button
+      type="button"
+      (click)="onSaveForm()"
+      *ngIf="accessOption.Update"
+    >
+      <mat-icon class="text-green-600" svgIcon="mat_solid:save"></mat-icon>
+      <span class="ml-2">Save</span>
+    </button>
+    <button
+      class="ml-2 text-primary"
+      mat-stroked-button
+      type="button"
+      (click)="createRelatedThinq()"
+      *ngIf="accessOption.Create"
+    >
+      <mat-icon class="text-primary" svgIcon="mat_solid:add"></mat-icon>
+      <span class="ml-2">Add</span>
+    </button>
+    <button
+      class="ml-2 text-red-600"
+      mat-stroked-button
+      type="button"
+      (click)="deleteThinq()"
+      *ngIf="accessOption.Delete"
+    >
+      <mat-icon class="text-red-600" svgIcon="mat_solid:delete"></mat-icon>
+      <span class="ml-2">Del</span>
+    </button>
+    <button
+      class="ml-2 text-gray-600"
+      mat-stroked-button
+      type="button"
+      (click)="createRelationship()"
+      *ngIf="accessOption.Update"
+    >
+      <mat-icon class="text-gray-600" svgIcon="mat_outline:share"></mat-icon>
+      <span class="ml-2">Rel</span>
+    </button>
+    <button
+      class="ml-2 text-primary"
+      mat-stroked-button
+      type="button"
+      (click)="resetForm()"
+    >
+      <mat-icon class="text-primary" svgIcon="mat_outline:restart_alt"></mat-icon>
+      <span class="ml-2">Reset</span>
+    </button>
+    <ng-container *ngFor="let button of buttons">
+      <ng-container [ngSwitch]="button.Type">
+        <ng-container *ngSwitchCase="'Button'">
+          <app-footer-button [button]="button" (clickButton)="onClick($event)"></app-footer-button>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Dropdown'">
+          <app-footer-dropdown [dropDownButton]="button" (clickButton)="onClick($event)"></app-footer-dropdown>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</div>

@@ -1,0 +1,50 @@
+<div class="flex flex-col w-full rounded min-w-0 bg-card dark:bg-transparent">
+  <!-- Header -->
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between border-b">
+    <!-- Loader -->
+    <ng-container *ngIf="(_isLoading$ | async) as _isLoading">
+      <div
+        class="fixed inset-x-0 top-0"
+        *ngIf="_isLoading">
+        <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+      </div>
+    </ng-container>
+    <!-- Title -->
+    
+    <!-- Header -->
+    <!-- <ng-container *ngIf="(_appData$ | async) as _appData">
+      <app-cabinet-header  
+        *ngIf="_appData._headerClass"
+        [title]="_cabinet" 
+        [subTitle]="_data.RowCount + ' results'"
+        [headerIcon]="_headerClass.Icon"
+        [headerClass]="_headerClass.CssClass"
+      ></app-cabinet-header>
+    </ng-container> -->
+    
+  </div>
+  <!-- Existing Relationships -->
+  <div class="flex flex-col md:flex-row">
+    <div class="w-full md:w-1/2 p-2 md:pr-4">
+      <thinq-existing-relationships 
+        [existingRelations]="_existingRelations"
+        (deleteRelationEvent)="deleteRelation($event)"
+      ></thinq-existing-relationships>
+    </div>
+    <div class="flex flex-col w-full md:w-1/2 p-2">
+      <!-- Title -->
+      <div class="text-2xl font-extrabold tracking-tight py-8">Add new relationships</div>
+      <thinq-relation-search
+        [enabledClasses]="_enabledClassesString"
+        [classFields]="_classFields"
+        (selectCabinet)="onSelectCabinet($event)"
+        (searchRecord)="onSearchRecord($event)"
+      ></thinq-relation-search>
+      <thinq-new-relationships 
+        [searchRelations]="_searchRelations" 
+        [relationshipOptions]="_relationshipOptions"
+        (updateRelationEvent)="updateRelation($event)"
+      ></thinq-new-relationships>
+    </div>
+  </div>
+</div>

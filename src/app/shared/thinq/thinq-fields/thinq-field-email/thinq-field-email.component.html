@@ -1,0 +1,9 @@
+<mat-form-field class="fuse-mat-no-subscript fuse-mat-dense w-full">
+  <mat-label *ngIf="labelVisibility">
+    {{ arrField.Label }}
+  </mat-label>
+  <input
+      [formControl]="control"
+      type="email"
+      matInput>
+</mat-form-field>

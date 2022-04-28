@@ -1,0 +1,290 @@
+<div class="flex flex-col flex-auto px-4">
+  <!-- Header -->
+  <div class="relative flex flex-0 flex-wrap items-center p-4 border-b bg-card">
+    <!-- Loading Indicator -->
+    <div
+      class="absolute inset-x-0 top-0"
+      *ngIf="isLoading"
+    >
+      <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+    </div>
+
+    <button
+      mat-icon-button
+      (click)="previous()"
+      [disabled]="isLoading"
+    >
+      <mat-icon
+        class="icon-size-5"
+        [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      (click)="next()"
+      [disabled]="isLoading"
+    >
+      <mat-icon
+        class="icon-size-5"
+        [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+    </button>
+
+    <div class="mx-4 text-2xl font-semibold tracking-tight whitespace-nowrap">
+      {{ viewTitle }}
+    </div>
+
+    <button
+      class="hidden md:inline-flex"
+      mat-icon-button
+      (click)="today()"
+      [disabled]="isLoading"
+    >
+      <mat-icon [svgIcon]="'heroicons_outline:calendar'"></mat-icon>
+    </button>
+
+    <div class="hidden md:block ml-auto">
+      <mat-button-toggle-group 
+        name="viewCalendar"
+        aria-label="Calendar View"
+        (change)="changeTimesheetView(viewType.value)"
+        [value]="viewCalendar"
+        #viewType="matButtonToggleGroup"
+      >
+        <mat-button-toggle value="timeGridDay">Day</mat-button-toggle>
+        <mat-button-toggle value="timeGridWeek">Week</mat-button-toggle>
+        <!-- <mat-button-toggle value="calendarView">Calendar</mat-button-toggle> -->
+      </mat-button-toggle-group>
+      <mat-form-field 
+        class="fuse-mat-dense fuse-mat-no-subscript w-30 ml-2"
+        [ngClass]="{'hidden': viewCalendar !== 'calendarView'}"
+      >
+        <mat-select
+          (selectionChange)="changeView(viewChanger.value)"
+          [value]="view"
+          #viewChanger="matSelect"
+        >
+          <mat-option [value]="'dayGridMonth'">Month</mat-option>
+          <mat-option [value]="'timeGridWeek'">Week</mat-option>
+          <mat-option [value]="'timeGridDay'">Day</mat-option>
+          <mat-option [value]="'listYear'">Schedule</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <!-- FullCalendar -->
+  <div class="flex flex-col flex-auto items-center mt-2">
+    <full-calendar
+      [ngClass]="{'hidden': viewCalendar !== 'calendarView'}"
+      [defaultView]="view"
+      [handleWindowResize]="false"
+      [firstDay]= "1"
+      [header]="false"
+      [height]="'parent'"
+      [plugins]="calendarPlugins"
+      #fullCalendar></full-calendar>
+    <ng-container *ngIf="viewCalendar !== 'calendarView'">
+      <ng-container *ngIf="viewCalendar === 'timeGridWeek'; else timesheetDayTemplate">
+        <!-- Timesheet Week View-->
+        <div class="relative flex flex-col w-full items-center p-2">
+          <div class="absolute backdrop-filter inset-0 backdrop-blur z-10" *ngIf="isLoading">
+          </div>
+          <div class="grid grid-cols-9 w-full">
+            <!-- Header -->
+            <div class="col-span-9 bg-gray-300 rounded-t-md p-2 grid grid-cols-9">
+              <div class="col-start-5 col-span-4 grid grid-cols-7">
+                <div class="col-span-1 hover:bg-gray-100 active:bg-gray-200 cursor-pointer" *ngFor="let day of weekDay">
+                  <div class="flex flex-col justify-center text-blue-600 p-1 sm:p-2">
+                    <span class="text-base font-semibold leading-none">
+                      {{ displayTime(day, 'ddd') }}
+                    </span>
+                    <span class="text-sm leading-none pt-1">
+                      {{ displayTime(day, 'DD MMM') }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Timesheet Entry List -->
+            <div class="col-span-9 grid grid-cols-9 p-2 items-center odd:bg-blue-50 even:bg-green-50" *ngFor="let timesheet of getGroupTimesheets();">
+              <div class="col-span-4 flex flex-col">
+                <span class="w-full overflow-hidden text-base card-content">
+                  {{ timesheet.Project }}
+                </span>
+                <span class="text-sm pl-1">
+                  {{ timesheet.Activity }}
+                </span>
+              </div>
+              <div class="col-span-4 grid grid-cols-7">
+                <span class="col-span-1 p-1 sm:p-2" *ngFor="let day of weekDay;">
+                  {{ getDailyWorkTimeByTask(timesheet, day) }}
+                </span>
+              </div>
+              <div class="col-span-1 text-center">
+                {{ getWeeklyWorkTimeByTask(timesheet) }}
+              </div>
+            </div>
+            <!-- Footer -->
+            <div class="col-span-9 bg-gray-300 rounded-b-md p-2 items-center grid grid-cols-9">
+              <div class="col-span-4">
+                <button
+                  class="ml-2"
+                  mat-raised-button
+                  type="button"
+                  color="primary"
+                  (click)="createTimesheet()"
+                >
+                  <mat-icon class="text-primary" svgIcon="mat_solid:add"></mat-icon>
+                  <span class="ml-2">Add</span>
+                </button>
+              </div>
+              <div class="col-span-4 grid grid-cols-7">
+                <div class="col-span-1" *ngFor="let day of weekDay">
+                  <div class="flex flex-col justify-center text-blue-600 p-1 sm:p-2">
+                    <span class="text-base leading-none">
+                      {{ getWorkTimeByDay(day) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-1 font-semibold text-center text-blue-600">
+                {{ getTotalWorkTimeByWeek() }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #timesheetDayTemplate>
+        <!-- Timesheet Day View -->
+        <mat-button-toggle-group 
+          class="w-full flex-wrap grid grid-cols-7 sm:grid-cols-8"
+          name="selectedDay"
+          aria-label="Week Day"
+          (change)="selectDay(selectDayChanger.value)"
+          [value]="selectedDay?.toString()"
+          #selectDayChanger="matButtonToggleGroup"
+        >
+          <mat-button-toggle class="col-span-1" *ngFor="let day of weekDay" [value]="day.toString()">
+            <div class="flex flex-col justify-center sm:py-2">
+              <span class="text-base leading-none">
+                {{ displayTime(day, 'ddd') }}
+              </span>
+              <span class="text-sm leading-none pt-1">
+                {{ getWorkTimeByDay(day) }}
+              </span>
+            </div>
+          </mat-button-toggle>
+          <mat-button-toggle class="col-span-7 my-2 sm:my-0 sm:col-span-1" disabled>
+            <div class="flex flex-col py-2">
+              <span class="text-base leading-none">
+                Total
+              </span>
+              <span class="text-sm leading-none pt-1">
+                {{ getTotalWorkTimeByWeek() }}
+              </span>
+            </div>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+        <!-- Timesheet Entry List: Day View-->
+        <div class="relative flex flex-col w-full items-center p-2" *ngIf="viewCalendar === 'timeGridDay'">
+          <div class="absolute backdrop-filter backdrop-blur inset-0 z-10" *ngIf="isLoading">
+          </div>
+          <!-- List -->
+          <div class="flex flex-col w-full" *ngIf="timesheets">
+            <div class="flex flex-col w-full" 
+              *ngFor="let projectId of objectKeys(timesheets);">
+              <div class="flex p-2 bg-gray-200 rounded-t-md text-lg">
+                {{ timesheets[projectId].projectName }}
+              </div>
+              <ng-container *ngIf="timesheets?.[projectId]">
+                <div *ngFor="let taskId of objectKeys(timesheets[projectId])">
+                  <div 
+                    class="grid grid-cols-12 p-2 items-center bg-card border-b border-gray-200"
+                    *ngIf="timesheets[projectId][taskId]['activity']"
+                  >
+                    <div class="col-span-9 min-h-full items-center grid grid-cols-9">
+                      <div class="col-span-5 text-base px-2 text-current overflow-hidden card-content">
+                        {{timesheets[projectId][taskId].taskName}}
+                      </div>
+                      <div class="col-span-1 text-sm p-2 text-gray-400"
+                      >
+                        {{isAssignedTask(timesheets[projectId][taskId].assignedId)?timesheets[projectId][taskId].assignedName:''}}
+                      </div>
+                      <div class="col-span-2 flex flex-col flex-auto h-full">
+                        <div class="flex flex-auto items-center" 
+                          *ngFor="let activity of objectKeys(timesheets[projectId][taskId]['activity'])">
+                          {{ activity }}
+                        </div>
+                      </div>
+                      <div class="col-span-1 text-sm p-2 text-gray-400">
+                        {{timesheets[projectId][taskId].status}}
+                      </div>
+                    </div>
+                    <div class="col-span-3 flex flex-col">
+                      <div class="grid grid-cols-3 m-1 items-center justify-center" 
+                        *ngFor="let activity of objectKeys(timesheets[projectId][taskId]['activity'])">
+                        <div class="col-span-1">
+                          <button
+                            mat-stroked-button
+                            class="text-primary timer"
+                            type="button"
+                            (click)="startTracking(projectId, taskId, activity)"
+                            *ngIf="!isTracking(projectId, taskId, activity)"
+                          >
+                            <mat-icon class="text-primary" svgIcon="mat_solid:timer"></mat-icon>
+                          </button>
+                          <button
+                            mat-raised-button
+                            class="timer"
+                            color="primary"
+                            type="button"
+                            (click)="stopTracking(projectId, taskId, activity)"
+                            *ngIf="isTracking(projectId, taskId, activity)"
+                          >
+                            <mat-icon svgIcon="mat_solid:timer"></mat-icon>
+                          </button>
+                        </div>
+                        <div class="col-span-2 text-right">
+                          <ng-container *ngIf="isTracking(projectId, taskId, activity); else editableTime">
+                            <span 
+                              class="w-full text-blue-600 font-bold"
+                            >
+                              {{ getWorkTimeByTimesheets(timesheets[projectId][taskId]['activity'][activity].timesheets) }}
+                            </span>
+                          </ng-container>
+                          <ng-template #editableTime>
+                            <input 
+                              class="w-full border rounded-sm text-right p-1 border-transparent hover:border-gray-400 focus:border-gray-400" 
+                              type="text" 
+                              (keydown.enter)="onEditTimesheet($event.target, projectId, taskId, activity)"
+                              (blur)="onBlurEditTime($event.target, projectId, taskId, activity)"
+                              [value]="getWorkTimeByTimesheets(timesheets[projectId][taskId]['activity'][activity].timesheets)"
+                            >
+                          </ng-template>
+                        </div>
+                        <!-- <div class="col-span-1">
+                          remaining
+                        </div> -->
+                      </div>                    
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="w-full">
+              <button
+                class="m-2"
+                mat-raised-button
+                type="button"
+                color="primary"
+                (click)="createTimesheet()"
+              >
+                <mat-icon class="text-primary" svgIcon="mat_solid:add"></mat-icon>
+                <span class="ml-2">Add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>    
+  </div>
+</div>

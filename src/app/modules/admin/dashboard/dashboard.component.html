@@ -1,0 +1,134 @@
+<div class="flex flex-col flex-auto min-w-0 mt-16" *transloco="let t">
+    <!-- Header -->
+    <div class="bg-card">
+
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div
+                class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 mt-8 sm:my-12"
+            >
+                <!-- Avatar and name -->
+                <div class="flex flex-auto items-center min-w-0 justify-center">
+                    <div class="flex flex-col min-w-0 text-center">
+                        <div
+                            class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+                        >
+                            {{ t("Hi") }} {{ username }}
+                        </div>
+                        <div
+                            class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+                        >
+                            {{ t("Welcome to") }} Tinman
+                        </div>
+
+                        <!--                        <div class="flex items-center mt-3 sm:mt-0 sm:ml-2 space-x-3 justify-center">-->
+                        <!--                            <button-->
+                        <!--                                class="fuse-mat-button-rounded bg-primary text-white rounded"-->
+                        <!--                                mat-flat-button-->
+                        <!--                            >-->
+                        <!--                                <span>My Profile</span>-->
+                        <!--                            </button>-->
+                        <!--                        </div>-->
+                        <!-- <div class="flex items-center mt-3 sm:mt-0 sm:ml-2 space-x-3 justify-center">
+                            <button
+                                class="fuse-mat-button-rounded bg-primary text-white"
+                                mat-flat-button
+                            >
+                                <span>My Results</span>
+                            </button>
+                        </div> -->
+                    </div>
+                    <!-- <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
+                        <img
+                            class="w-full h-full object-cover"
+                            src="assets/images/avatars/brian-hughes.jpg"
+                        />
+                    </div>
+                    <div class="flex flex-col min-w-0 ml-4">
+                        <ng-container>
+                            <div
+                                class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+                            >
+                                {{ t("welcome-back") }} {{ username }}
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center">
+                            <mat-icon
+                                class="icon-size-5"
+                                [svgIcon]="'heroicons_outline:archive'"
+                            ></mat-icon>
+                            <div
+                                class="ml-1.5 leading-6 truncate text-secondary"
+                            >
+                                You have 3 best results
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <!-- Actions -->
+                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+                    <!-- <button
+                        class="fuse-mat-button-rounded bg-primary text-white"
+                        mat-flat-button
+                    >
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:share'"
+                        ></mat-icon>
+                        <span class="ml-2">{{ t("Share") }}</span>
+                    </button>
+                    <button
+                        class="fuse-mat-button-rounded bg-primary text-white"
+                        mat-flat-button
+                        [routerLink]="'/assessment/help'"
+                    >
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:pencil-alt'"
+                        ></mat-icon>
+                        <span class="ml-2">{{ t("Next") }}</span>
+                    </button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto" *ngIf="isProfileCompleted; else notCompleted">
+            <h4 class="text-2xl text-center mb-2 font-semibold">My Results</h4>
+            <ng-container *ngFor="let level of candidateJobs | keyvalue">
+                <candidate-section [section]="level.value" class="mt-1 px-4"></candidate-section>
+            </ng-container>
+        </div>
+        <ng-template #notCompleted>
+            <div class="flex flex-col max-w-screen-xl mx-auto w-60">
+                <button
+                    class="w-full fuse-mat-button bg-primary text-white rounded"
+                    mat-flat-button
+                    (click)="finishQA()"
+                    *ngIf="isAllAnswered"
+                >
+                    <span>{{ t("Finish Interest Selection") }}</span>
+                </button>
+                <button
+                    class="fuse-mat-button-rounded bg-primary text-white"
+                    mat-flat-button
+                    (click)="doQA()"
+                    *ngIf="!isAllAnswered"
+                >
+                    <span>{{ t("Finish Questions") }}</span>
+                </button>
+            </div>
+        </ng-template>
+
+    </div>
+    <div class="flex items-center mt-3 sm:mt-0 sm:ml-2 space-x-3 justify-center">
+        <button
+            class="fuse-mat-button-rounded bg-primary text-white"
+            mat-flat-button
+            (click)="signOut()"
+        >
+            <span>{{ t("Logout") }}</span>
+        </button>
+    </div>
+</div>

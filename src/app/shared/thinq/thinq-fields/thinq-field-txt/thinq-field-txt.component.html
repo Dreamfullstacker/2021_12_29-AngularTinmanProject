@@ -1,0 +1,13 @@
+<mat-form-field 
+  class="fuse-mat-no-subscript fuse-mat-dense w-full" 
+  [ngClass]="{'mat-form-field-readonly': arrField.ReadOnly}"
+>
+  <mat-label *ngIf="labelVisibility">
+    {{arrField.Label}}
+  </mat-label>
+  <input
+    [formControl]="control"
+    matInput 
+    [readonly]="arrField.ReadOnly"
+  />
+</mat-form-field>

@@ -1,0 +1,35 @@
+<div class="flex flex-col relative p-4 min-w-0">
+  <!-- Loader -->
+  <div
+      class="fixed inset-x-0 top-0 z-50"
+      *ngIf="isLoading">
+      <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+  </div>
+  <!-- Search bar -->
+  <mat-form-field 
+    class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded mt-2 mb-4 w-60 focus:w-full"
+  >
+    <mat-icon
+      class="icon-size-5"
+      matPrefix
+      [svgIcon]="'heroicons_solid:search'"></mat-icon>
+    <input
+      matInput
+      #searchInput
+      [formControl]="searchInputControl"
+      [placeholder]="'Search relations'">
+  </mat-form-field>
+  <div class="text-xl">
+    Add new THINQ
+  </div>
+  <div class="flex flex-wrap p-1 sm:p-2">
+    <ng-container *ngFor="let classGroup of displayCabinets | keyvalue">
+      <app-class-group
+        [classGroup]="classGroup.key"
+        [cabinets]="classGroup.value"
+        (createThinq)="createThinq($event)"
+      >
+      </app-class-group>
+    </ng-container>
+  </div>
+</div>

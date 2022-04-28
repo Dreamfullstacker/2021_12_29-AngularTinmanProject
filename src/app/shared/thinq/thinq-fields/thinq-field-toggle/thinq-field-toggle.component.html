@@ -1,0 +1,9 @@
+<div class="flex flex-col">
+  <span *ngIf="labelVisibility">
+    {{arrField.Label}}
+  </span>
+  <mat-slide-toggle 
+    [formControl]="control"
+    color="primary"
+  ></mat-slide-toggle>
+</div>

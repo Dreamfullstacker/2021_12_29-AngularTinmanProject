@@ -1,0 +1,80 @@
+<mat-accordion *transloco="let t">
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <span class="font-semibold">
+                    {{ section.Interest }}
+                </span>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngFor="let job of getFirstJobs(section.JobsLevel3)">
+            <candidate-job [job]="job"> </candidate-job>
+        </ng-container>
+        <div *ngIf="isExpandableJob3; else moreJobs3Template" class="flex justify-center">
+            <button
+                class="fuse-mat-button-rounded"
+                mat-icon-button
+                (click)="isExpandableJob3 = false"
+            >
+                <mat-icon
+                    class="icon-size-12"
+                    [svgIcon]="'heroicons_solid:chevron-down'"
+                ></mat-icon>
+            </button>
+        </div>
+        <ng-template #moreJobs3Template>
+            <ng-container *ngFor="let job of getRestJobs(section.JobsLevel3)">
+                <candidate-job [job]="job"> </candidate-job>
+            </ng-container>
+            <div class="flex justify-center">
+                <button
+                    class="fuse-mat-button-rounded"
+                    mat-icon-button
+                    (click)="isExpandableJob3 = true"
+                >
+                    <mat-icon
+                        class="icon-size-12"
+                        [svgIcon]="'heroicons_solid:chevron-up'"
+                    ></mat-icon>
+                </button>
+            </div>
+            
+        </ng-template>
+        <ng-container *ngFor="let job of getFirstJobs(section.JobsLevel4)">
+            <candidate-job [job]="job"> </candidate-job>
+        </ng-container>
+        <ng-container *ngIf="isExpandableJob4; else moreJobs4Template">
+            <div class="flex justify-center">
+                <button
+                    class="fuse-mat-button-rounded"
+                    mat-icon-button
+                    (click)="isExpandableJob4 = false"
+                >
+                    <mat-icon
+                        class="icon-size-12"
+                        [svgIcon]="'heroicons_solid:chevron-down'"
+                    ></mat-icon>
+                </button>
+            </div>
+           
+        </ng-container>
+        <ng-template #moreJobs4Template>
+            <ng-container *ngFor="let job of getRestJobs(section.JobsLevel4)">
+                <candidate-job [job]="job"> </candidate-job>
+            </ng-container>
+            <div class="flex justify-center">
+                <button
+                    class="fuse-mat-button-rounded"
+                    mat-icon-button
+                    (click)="isExpandableJob4 = true"
+                >
+                    <mat-icon
+                        class="icon-size-12"
+                        [svgIcon]="'heroicons_solid:chevron-up'"
+                    ></mat-icon>
+                </button>
+            </div>
+            
+        </ng-template>
+    </mat-expansion-panel>
+</mat-accordion>

@@ -1,0 +1,23 @@
+.txl-label {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  --tw-text-opacity: 1 !important;
+  color: rgba(var(--fuse-text-default-rgb), var(--tw-text-opacity)) !important;
+}
+.ng-select.ng-select-single .ng-select-container {
+  height: 2.375rem;
+  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity)) !important;
+  border-color: rgba(203, 213, 225, var(--tw-border-opacity)) !important;
+  border-radius: 6px;
+  .ng-value-container .ng-input {
+    top: 0.5rem;
+  }
+}
+.ng-dropdown-panel {
+  min-width: 100%;
+  max-width: 150%;
+  width: initial !important;
+}

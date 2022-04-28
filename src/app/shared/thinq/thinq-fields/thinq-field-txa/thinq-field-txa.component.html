@@ -1,0 +1,23 @@
+<mat-form-field 
+  class="fuse-mat-no-subscript fuse-mat-dense w-full"
+  [ngClass]="{'mat-form-field-readonly': arrField.ReadOnly}"
+>
+  <mat-label *ngIf="labelVisibility">
+    {{ arrField.Label }}
+  </mat-label>
+  <textarea
+    [formControl]="control"
+    matTextareaAutosize
+    #textarea
+    [matAutosizeMinRows]="5"
+    [matAutosizeMaxRows]="10"
+    [readonly]="arrField.ReadOnly"
+    matNativeControl></textarea>
+  <div
+    class="h-full py-2"
+    *ngIf="!arrField.ReadOnly"
+    matSuffix
+  >
+    <i (click)="onAddTag()" class="fa fa-user-tag"></i>
+  </div>
+</mat-form-field>

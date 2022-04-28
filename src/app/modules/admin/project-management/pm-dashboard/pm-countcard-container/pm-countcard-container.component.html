@@ -1,0 +1,9 @@
+<div class="p-2 grid grid-cols-1 gap-1 sm:gap-2 sm:grid-cols-4 md:grid-cols-10 xl:grid-cols-12">
+  <ng-container *ngFor="let card of totalCountByStatus | keyvalue">
+    <pm-task-card
+      [status]="card.key"
+      [count]="card.value"
+      (clickCard)="onTaskCardClick(card.key)"
+    ></pm-task-card>
+  </ng-container>
+</div>

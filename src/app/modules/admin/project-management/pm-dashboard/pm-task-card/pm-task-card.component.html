@@ -1,0 +1,17 @@
+<div 
+  class="col-span-1 flex border-l-4 p-2 shadow justify-between rounded cursor-pointer hover:text-white" 
+  (click)="onClickCard()"
+  [ngClass]="getTaskCardClass(status, type)"
+>
+  <div class="flex flex-col text-sm">
+    <span>
+      {{status}}
+    </span>
+    <span *ngIf="type">
+      {{type}}
+    </span>
+  </div>
+  <span class="font-semibold text-base">
+    {{count}}
+  </span>
+</div>

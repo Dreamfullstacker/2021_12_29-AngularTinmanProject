@@ -1,0 +1,15 @@
+<div class="flex items-center justify-center w-full h-screen" *transloco="let t">
+    <span class="text-xl">{{ t("Congratulations") }}</span>
+
+    <button
+        class="fuse-mat-button-rounded ml-2"
+        mat-icon-button
+        [routerLink]="'/assessment/profile'"
+    >
+        <mat-icon
+            class="icon-size-8"
+            color="primary"
+            [svgIcon]="'heroicons_outline:arrow-right'"
+        ></mat-icon>
+    </button>
+</div>

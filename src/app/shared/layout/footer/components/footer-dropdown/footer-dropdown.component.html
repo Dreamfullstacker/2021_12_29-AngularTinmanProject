@@ -1,0 +1,14 @@
+<button mat-stroked-button [matMenuTriggerFor]="menu" class="ml-2">
+  <span>
+    {{ dropDownButton.Text }}
+  </span>
+</button>
+<mat-menu #menu="matMenu">
+  <button 
+    *ngFor="let btn of dropDownButton.List"
+    mat-menu-item 
+    (click)="onClick(btn.Action, btn.Data)"
+  >
+    <span> {{ btn.Text }}</span>
+  </button>
+</mat-menu>

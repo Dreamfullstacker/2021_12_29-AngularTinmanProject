@@ -1,0 +1,56 @@
+<div class="flex w-full">
+  <div class="flex flex-col w-1/3 py-2 pr-4">
+    <mat-form-field class="fuse-mat-no-subscript fuse-mat-dense mb-2">
+      <mat-label>
+        Choose cabinet you want to search
+      </mat-label>
+      <mat-select [formControl]="cabinetControl">
+        <mat-option 
+          *ngFor="let cabinet of enabledClasses"
+          [value]="cabinet"
+        >
+          {{ cabinet }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="fuse-mat-no-subscript fuse-mat-dense">
+      <mat-label>
+        Choose fields you want to search in
+      </mat-label>
+      <mat-select [formControl]="fieldControl">
+        <mat-option 
+          *ngFor="let field of classFields"
+          [value]="field.FieldName"
+        >
+          {{ field.FieldName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="flex flex-col items-end w-2/3 p-2">
+    <!-- Search -->
+    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript min-w-60 w-full">
+      <mat-label>
+        Search for...
+      </mat-label>
+      <mat-icon
+        class="icon-size-5"
+        matPrefix
+        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+      <input
+        matInput
+        [formControl]="searchInputControl"
+        [autocomplete]="'off'"
+        [placeholder]="'Search relations'">
+    </mat-form-field>
+    <button
+      class="px-6 m-2"
+      color="primary"
+      mat-flat-button
+      type="button"
+      (click)="searchRecords()"
+    >
+      Search
+    </button>
+  </div>
+</div>

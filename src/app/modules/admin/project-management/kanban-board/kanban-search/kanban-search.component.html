@@ -1,0 +1,13 @@
+<form [formGroup]="searchForm">
+  <div class="grid grid-cols-10 gap-2 w-full pt-4 px-4">
+    <ng-container *ngFor="let searchField of searchFields">
+      <thinq-form-field
+        class="col-span-5 md:col-span-1"
+        [control]="searchForm.get(searchField.Label)" 
+        [arrField]="searchField"
+        [labelVisibility]="false"
+      >
+      </thinq-form-field>
+    </ng-container>
+  </div>
+</form>

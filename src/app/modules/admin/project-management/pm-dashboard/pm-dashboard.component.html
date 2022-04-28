@@ -1,0 +1,151 @@
+<mat-drawer-container
+  class="w-full h-full bg-card dark:bg-transparent"
+  (backdropClick)="onBackdropClicked()"
+>
+  <mat-drawer 
+    class="w-full h-full sm:w-120 dark:bg-gray-900"
+    [mode]="drawerMode"
+    [opened]="false"
+    [position]="'end'"
+    [disableClose]="true"
+    #matDrawer
+  >
+    <pm-side-screen 
+      [countTaskInfo]="countTaskInfo$ | async"
+      [selectedStatus]="selectedStatus"
+      (closeScreen)="onBackdropClicked()"
+      (selectCard)="onTaskCardClick($event)"
+    ></pm-side-screen>
+  </mat-drawer>
+  <mat-drawer-content class="flex w-full h-full">
+    <div class="flex flex-col rounded min-w-0 h-full w-full bg-gray-100 dark:bg-transparent">
+      <!-- Header -->
+      <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between border-b">
+        <!-- Loader -->
+        <ng-container *ngIf="isLoading$ | async as isLoading">
+          <div
+            class="absolute inset-x-0 top-0"
+            *ngIf="isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+          </div>
+        </ng-container>
+        <div class="flex w-full p-2 justify-between">
+          <!-- Title -->
+          <div class="flex text-2xl font-semibold text-center items-center">
+            BizOps
+          </div>
+          <button
+            color="primary"
+            mat-flat-button
+            (click)="openTotalInfo()"
+          >
+            Total
+          </button>
+        </div>
+      </div>
+    
+      <!-- Main -->
+      <div class="flex flex-col overflow-hidden flex-auto">
+        <!-- Filter Bar -->
+        <pm-dashboard-searchbar 
+          [userArray]="userArray$ | async"
+          [filterForm]="filterForm"
+          (filterEvent)="applyFilter($event)"
+          #pmSearchbar
+        ></pm-dashboard-searchbar>
+        <!-- CountCard -->
+        <pm-countcard-container 
+          [countTaskInfo]="countTaskInfo$ | async"
+          (selectCard)="onSelectTaskStatus($event)"
+        ></pm-countcard-container>
+        <!-- Project Type -->
+        <div class="flex p-2">
+          <div class="flex">
+            <ng-container *ngFor="let filter of objectKey(filterFunction)">
+              <button
+                class="mat-fuse-dense mx-1 rounded px-2 border h-9"
+                [ngClass]="[
+                  selectedFilter === filter ? 
+                  'bg-teal-500 text-white border-teal-500' : 
+                  'text-green-600 border-green-600 bg-card hover:bg-green-700 hover:text-white'
+                ]"
+                mat-stroke-button
+                (click)="filterProject(filter)"
+              >
+                {{ filterFunction[filter].label??filter }}
+              </button>
+            </ng-container>
+          </div>
+        </div>
+        <!-- Table -->
+        <div class="relative flex flex-col flex-auto px-2 overflow-hidden w-full" *ngIf="projects">
+          <div class="table-loading-shade" *ngIf="isLoading$ | async as isLoading">
+      
+          </div>
+          <div class="w-full h-full rounded border overflow-auto">
+            <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 pm-dashboard-table max-h-screen">
+              <!-- Number Column -->
+              
+              <ng-container *ngFor="let col of columns; let i = index" matColumnDef="{{col.field}}">
+                <th 
+                  mat-header-cell 
+                  *matHeaderCellDef
+                  mat-sort-header
+                  [ngStyle]="{
+                    'min-width': col.width + 'px',
+                    'max-width': col.width + 'px'
+                  }"
+                >
+                  <span class="flex items-center text-md">
+                    {{col.field}}
+                  </span>
+                </th>
+                <td 
+                  mat-cell 
+                  *matCellDef="let row"
+                  [ngStyle]="{
+                    'min-width': col.width + 'px',
+                    'max-width': col.width + 'px'
+                  }"
+                >
+                  <ng-container *ngIf="col.field === 'Id'; else viewTemplate">
+                    <a [routerLink]="'/admin/thinq/' + row[col.value]">
+                      <i class="text-blue-700 fa fa-external-link-alt"></i>
+                    </a>
+                  </ng-container>
+                  <ng-template #viewTemplate>
+                    <span class="w-full px-1 text-sm overflow-hidden pmtable-cell">
+                      {{row[col.value]}}
+                    </span>
+                  </ng-template>
+                </td>
+              </ng-container>
+    
+              <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayColumns | paginate: {
+                id: 'server', itemsPerPage: pagination.size, currentPage: pagination.page + 1, totalItems: pagination.length }" class="pmtable-row"></tr>
+    
+              <!-- Group header -->
+              <ng-container *ngIf="groupByColumns[0] !== ''">
+                <ng-container matColumnDef="groupHeader">
+                  <td mat-cell colspan="999" *matCellDef="let group">
+                    <span class="flex items-center">
+                      <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
+                      <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
+                      <strong>{{group[groupByColumns[group.level - 1]]}} ({{group.totalCounts}} items)</strong>
+                    </span>
+                  </td>
+                </ng-container>
+                <tr mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"> </tr>
+              </ng-container>
+    
+            </table>
+          </div>
+          <app-footer [pagination]="pagination" [paginationConfig]="paginationConfig" (paginationChanged)="paginationChanged($event)">
+    
+          </app-footer>
+        </div>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

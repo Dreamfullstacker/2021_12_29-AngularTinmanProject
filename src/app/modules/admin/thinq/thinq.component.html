@@ -1,0 +1,47 @@
+<div class="flex flex-col relative flex-auto min-w-0">
+    <!-- Loader -->
+    
+    <ng-container *ngIf="(_isLoading$ | async) as _isLoading">
+        <div
+            class="absolute inset-x-0 top-0"
+            *ngIf="_isLoading">
+            <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+        </div>
+    </ng-container>
+    <!-- Header -->
+    <app-cabinet-header 
+        [title]="data.Abstract" 
+        [subTitle]="getSubTitle(data.CreatedBy, data.DateTimeCreated)"
+        [headerIcon]="data.Icon"
+        [headerClass]="data.CssClass"
+    ></app-cabinet-header>
+
+    <!-- Main -->
+    <div class="bg-gray-100 grid grid-cols-12 gap-x-0 border-t -mt-px pt-4 sm:pb-10 sm:pt-6">
+        <div class="col-span-12 md:col-span-6 lg:col-span-7 px-2 sm:px-4 lg:px-6">
+            <!-- Default form -->
+            <app-thinq-form [cabinet]="data.ClassName" [arrFields]="data.Fields" #thinqform></app-thinq-form>
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-5 px-2 pb-12 sm:pr-4 lg:pr-6">
+            <mat-tab-group animationDuration="0ms">
+                <mat-tab label="Related"> 
+                    <app-thinq-relation [totalRelations]="relationships"></app-thinq-relation>
+                </mat-tab>
+                <mat-tab label="Audit Trail"> 
+                    <app-thinq-audit></app-thinq-audit>
+                </mat-tab>
+            </mat-tab-group>
+            <div class="justify-end">
+                <ngx-dropzone (change)="onSelect($event)" [multiple]="false">
+                    <ngx-dropzone-label>Drag and drop file here.</ngx-dropzone-label>
+                    <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                        <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+                    </ngx-dropzone-preview>
+                </ngx-dropzone>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <app-footer [buttons]="data.FooterButtons" [accessOption]="data.CRUD" (clickButton)="onClickFooterButton($event)" class="fixed w-full bottom-0 z-10"></app-footer>
+</div>

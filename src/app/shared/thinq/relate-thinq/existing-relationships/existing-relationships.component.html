@@ -1,0 +1,104 @@
+<div class="flex flex-col flex-auto rounded min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+  <!-- Header -->
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+    <!-- Title -->
+    <div class="text-2xl font-extrabold tracking-tight">Existing relationships</div>
+  </div>
+
+  <!-- Main -->
+  <div class="relative flex flex-auto overflow-hidden">
+
+    <!-- Relations list -->
+    <div class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto">
+      <ng-container *ngIf="existingRelations">
+        <ng-container *ngIf="relations.length > 0; else noRelations">
+          <div class="grid">
+            <!-- Header -->
+            <div
+              class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+              matSort
+              matSortDisableClear>
+              <div
+                class="block">
+                Cab
+              </div>
+              <div
+                class="block"
+                [mat-sort-header]="'Abstract'">
+                Relationship
+              </div>
+              <div
+                class="block">
+                Remove Relationship
+              </div>
+            </div>
+            <!-- Rows -->
+            <ng-container *ngFor="let relation of relations; trackBy: trackByFn">
+              <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                <!-- Cabinet -->
+                <div class="flex items-center">
+                  <app-cabinet-icon 
+                    [size]="1" 
+                    [cabinetClass]="relation.ClassCssClass" 
+                    [cabinetIcon]="relation.ClassIcon"></app-cabinet-icon>
+                </div>
+
+                <!-- Abstract -->
+                <div class="flex flex-auto items-center">
+                  <a class="hover:underline cursor-pointer" [routerLink]="'/admin/thinq/' + relation.AppDataId">
+                    {{relation.Abstract}} 
+                    {{relation.ClassName === 'Document' ? '' : '(' + relation.RelationshipName + ')'}}
+                  </a>
+                  <button
+                    mat-icon-button 
+                    (click)="downloadDocument(relation.AppDataId)"
+                    *ngIf="relation.ClassName === 'Document'"
+                  >
+                    <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button 
+                    [routerLink]="'/admin/document/view/' + relation.AppDataId"
+                    *ngIf="relation.ClassName === 'Document'"
+                  >
+                    <mat-icon [svgIcon]="'heroicons_outline:eye'"></mat-icon>
+                  </button>
+                </div>
+
+                <!-- Delete -->
+                <div class="flex flex-auto items-center">
+                  <button
+                    class="ml-2 text-red-600"
+                    mat-stroked-button
+                    type="button"
+                    (click)="deleteRelation(relation.AppDataId, relation.RelationshipId)"
+                  >
+                    <mat-icon class="text-red-600" svgIcon="mat_solid:delete"></mat-icon>
+                    <span class="ml-2">Delete Rel</span>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <mat-paginator
+            class="border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+            [length]="pagination.length"
+            [pageIndex]="pagination.page"
+            [pageSize]="pagination.size"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            [showFirstLastButtons]="true"></mat-paginator>
+
+        </ng-container>
+      </ng-container>
+
+      <ng-template #noRelations>
+        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no relations!</div>
+      </ng-template>
+
+    </div>
+
+  </div>
+
+</div>

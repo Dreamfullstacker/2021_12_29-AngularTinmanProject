@@ -1,0 +1,35 @@
+
+
+<mat-form-field class="col-span-2">
+    <mat-label>Province</mat-label>
+    <mat-select
+        [placeholder]="'Province'"
+        [formControl]="_province"
+        (selectionChange)="onProvinceChange($event)"
+    >
+        <mat-option *ngFor="let item of provinces" value="{{item['Province Name Eng']}}">{{_lang === 'English' ? item['Province Name Eng'] : item['Province Name Thai']}}</mat-option>
+    </mat-select>
+    <mat-error> Province is required </mat-error>
+</mat-form-field>
+<mat-form-field class="col-span-2">
+    <mat-label>District</mat-label>
+    <mat-select
+        [placeholder]="'District'"
+        [formControl]="_district"
+        (selectionChange)="onDistrictChange($event)"
+    >
+    <mat-option *ngFor="let item of districts" value="{{item['District Name Eng']}}">{{_lang === 'English' ? item['District Name Eng'] : item['District Name Thai']}}</mat-option>
+    </mat-select>
+    <mat-error> District is required </mat-error>
+</mat-form-field>
+<mat-form-field class="col-span-2">
+    <mat-label>SubDistrict</mat-label>
+    <mat-select
+        [placeholder]="'SubDistrict'"
+        [formControl]="_subDistrict"
+    >
+    <mat-option *ngFor="let item of subdistricts" value="{{item['Sub-District Eng']}}">{{_lang === 'English' ? item['Sub-District Eng'] : item['Sub-district Name Thai']}}</mat-option>
+    </mat-select>
+    <mat-error> SubDistrict is required </mat-error>
+</mat-form-field>
+

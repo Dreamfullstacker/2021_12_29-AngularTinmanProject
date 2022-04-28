@@ -1,0 +1,112 @@
+<div
+    class="flex flex-col w-full items-center justify-center pt-4"
+    *transloco="let t"
+>
+    <!-- Logo -->
+    <div class="w-40 mx-auto">
+        <img src="assets/images/logo/kqlogo.png" />
+    </div>
+    <div class="flex flex-col w-full justify-center p-4" cdkDropListGroup>
+        <div class="mx-2 p-4">
+            <h2 class="bg-green-200 rounded text-xl px-2 py-4 text-center profile-item">
+                {{finalResults.length}} {{ finalResults.length > 1 ? t("clear winners, pick") :  t("clear winner, pick") }}
+                {{3-finalResults.length}} {{ t("more.") }}
+            </h2>
+
+            <div
+                id="final-result"
+                class="bg-gray-100 min-h-10"
+                [cdkDropListData]="finalResults"
+                (cdkDropListDropped)="drop($event)"
+                [cdkDropListEnterPredicate]="finalEnterPredicate(finalResults)"
+                [cdkDropListSortPredicate]="finalSortPredicate(finalResults)"
+                cdkDropList
+            >
+
+                <div
+                    class="relative flex justify-center bg-gray-200 p-4 my-3 shadow rounded text-base profile-item"
+                    *ngFor="let final of finalResults"
+                    [cdkDragDisabled]="final.isFinal"
+                    [cdkDragData]="final"
+                    cdkDrag
+                >
+                    <span class="absolute right-4">
+                        {{ final.point }}
+                    </span>
+                    <span class="text-lg">
+                        {{ t(final.label) }}
+                    </span>
+                </div>
+                <div
+                    class="relative flex justify-center py-4 my-3 profile-item rounded border-dashed border-4 border-gray text-lg"
+                >
+                    {{t("Drag Here")}}
+                </div>
+            </div>
+            <!-- <h2 class="text-xl text-center">
+                Please select your top three by dragging from below
+            </h2> -->
+        </div>
+        <div class="mx-2 p-4" *ngIf="finalResults?.length !== 3">
+            <h2 class="bg-green-200 rounded text-xl px-2 py-4 text-center profile-item">
+                {{displayResults.length}} {{ t("balanced traits") }} <br>
+                {{ t("shuffle your preference up") }}
+            </h2>
+
+            <div
+                class="bg-gray-100"
+                (cdkDropListDropped)="drop($event)"
+                [cdkDropListData]="displayResults"
+                [cdkDropListEnterPredicate]="availableEnterPredicate"
+                cdkDropList
+                cdkDropListSortingDisabled
+            >
+                <div
+                    class="relative flex justify-center bg-gray-200 p-4 my-3 shadow rounded text-base profile-item"
+                    *ngFor="let availableProfile of displayResults"
+                    [cdkDragData]="availableProfile"
+                    cdkDrag
+                >
+                    <span class="absolute left-4">
+                        <mat-icon
+                            class="icon-size-5 text-black"
+                            [svgIcon]="'heroicons_outline:menu'"
+                        ></mat-icon>
+                    </span>
+                    <span class="text-lg text-center">
+                        {{ t(availableProfile.label) }}
+                         <mat-accordion class="max-w-4xl mt-8">
+                             <mat-expansion-panel>
+                                 <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                                    <mat-panel-title class="text-xs text-center">{{ t(availableProfile.sub_title) }}</mat-panel-title>
+                                </mat-expansion-panel-header>
+                                 {{ t(availableProfile.full) }}
+                             </mat-expansion-panel>
+                         </mat-accordion>
+                    </span>
+                    <span class="absolute right-4">
+                        {{ availableProfile.point }}
+                    </span>
+            </div>
+        </div>
+    </div>
+    <div
+        class="flex mt-3 justify-center items-center p-4"
+        *ngIf="finalResults?.length === 3"
+    >
+        <span class="mr-2"> {{ t("Your interests are clear cut. Click here to see some roles that align with you.") }}
+        </span>
+
+        <button
+            class="fuse-mat-button-rounded bg-primary text-white"
+            [matTooltip]="t('Yes')"
+            mat-icon-button
+            (click)="onFinalResult()"
+        >
+            <mat-icon
+                class="icon-size-5 text-white"
+                [svgIcon]="'heroicons_solid:check'"
+            ></mat-icon>
+        </button>
+    </div>
+</div>

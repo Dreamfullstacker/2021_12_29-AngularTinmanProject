@@ -1,0 +1,18 @@
+<div class="bg-card">
+    <div class="flex flex-col w-full mx-auto px-6 sm:px-8">
+        <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-4 sm:my-2">
+            <!-- Avatar and name -->
+            <div class="flex flex-auto items-center min-w-0">
+                <div class="flex w-16 h-16 items-center justify-center rounded overflow-hidden">
+                    <app-cabinet-icon [size]="1.5" [cabinetClass]="headerClass" [cabinetIcon]="headerIcon"></app-cabinet-icon>
+                </div>
+                <div class="flex flex-col min-w-0 ml-4">
+                    <div class="text-xl md:text-2xl font-semibold tracking-tight leading-7 md:leading-snug truncate">{{ title }}</div>
+                    <div class="flex items-center">
+                        <div class="leading-6 truncate text-sm">{{ subTitle }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div
+    class="flex flex-col w-full items-center pt-4 p-2 sm:pt-30 sm:mx-auto"
+    *transloco="let t"
+>
+    <div class="flex flex-col">
+        <!-- Out -->
+        <div class="flex w-full justify-end">
+            <div class="w-20 mx-auto">
+                <img src="assets/images/logo/kqlogo.png" />
+            </div>
+        </div>
+        <div class="flex w-full justify-end">
+            <div class="w-40 mx-auto">
+                <img src="assets/images/tinman/tinmanhelp1.jpeg" />
+            </div>
+        </div>
+    </div>
+    <!-- Guide Title -->
+    <div class="text-2xl sm:text-3xl w-full text-center mb-4">
+        {{ t("Interest Guide Page") }} 1 {{ t("Of") }} 4
+    </div>
+    <!-- Guide Text -->
+    <div class="flex flex-col max-w-240 mb-4">
+        <span class="flex max-w-200 text-base text-2xl sm:text-3xl items-center mb-4" *ngFor="let guide of guides">
+            <mat-icon
+                class="icon-size-5 mr-2 text-primary"
+                [svgIcon]="'heroicons_solid:check'"
+            ></mat-icon>
+            {{ t(guide) }}
+        </span>
+    </div>
+
+    <div class="flex items-center mt-3 sm:mt-0 sm:ml-2 space-x-3 justify-center">
+        <button
+            class="fuse-mat-button-rounded bg-primary text-white"
+            mat-flat-button
+            [routerLink]="'/assessment/help2'"
+        >
+            <span class="mr-2">{{ t("Next") }}</span>
+            <mat-icon
+                class="icon-size-5"
+                [svgIcon]="'heroicons_solid:arrow-right'"
+            ></mat-icon>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+.pmtable-row {
+  height: 30px !important;
+}
+
+.pmtable-cell {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}

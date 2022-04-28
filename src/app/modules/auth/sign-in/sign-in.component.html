@@ -1,0 +1,129 @@
+<div
+    class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0"
+    *transloco="let t"
+>
+    <div
+        class="relative hidden bg-cover md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l"
+        style="
+            background-image: url('https://source.unsplash.com/WEQbe2jBg40/600x1200');
+        "
+    ></div>
+    <div
+        class="md:flex md:items-center md:justify-start w-full sm:w-auto md:h-full lg:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card"
+    >
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+            <!-- Logo -->
+            <!-- <div class="w-12">
+                <img src="assets/images/logo/kqlogo.png">
+            </div> -->
+            <button
+                class="fuse-mat-button-large w-1/2 my-6"
+                mat-flat-button
+                type="button"
+                [color]="'primary'"
+                (click)="onLangChange()"
+            >
+                <span>
+                    {{ language === 'English' ? t("Thai") : t("English") }}
+                </span>
+            </button>
+            <h1 class="text-5xl">{{ t("Login") }}</h1>
+            <mat-label>
+                Don't have an account?
+                <a
+                    class="text-md font-medium text-primary-500 hover:underline"
+                    routerLink="/sign-up"
+                    >Sign Up
+                </a>
+            </mat-label>
+            <!-- Alert -->
+            <fuse-alert
+                class="mt-8 -mb-4"
+                *ngIf="showAlert"
+                [appearance]="'outline'"
+                [showIcon]="false"
+                [type]="alert.type"
+                [@shake]="alert.type === 'error'"
+            >
+                {{ alert.message }}
+            </fuse-alert>
+
+            <!-- Sign in form -->
+            <form
+                class="mt-4"
+                [formGroup]="signInForm"
+                (submit)="signIn()"
+                #signInNgForm="ngForm"
+            >
+                <!-- Username field -->
+                <mat-form-field class="w-full">
+                    <mat-label>{{ t("Username") }}</mat-label>
+                    <input
+                        id="username"
+                        matInput
+                        [formControlName]="'username'"
+                    />
+                    <mat-error
+                        *ngIf="signInForm.get('username').hasError('required')"
+                    >
+                        {{ t("Username is required") }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="w-full">
+                    <mat-label>{{ t("Password") }}</mat-label>
+                    <input
+                        id="password"
+                        matInput
+                        type="password"
+                        [formControlName]="'password'"
+                        #passwordField
+                    />
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="
+                            passwordField.type === 'password'
+                                ? (passwordField.type = 'text')
+                                : (passwordField.type = 'password')
+                        "
+                        matSuffix
+                    >
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"
+                        ></mat-icon>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"
+                        ></mat-icon>
+                    </button>
+                    <mat-error>
+                        {{ t("Password is required") }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Submit button -->
+                <button
+                    class="fuse-mat-button-large w-full my-6"
+                    mat-flat-button
+                    type="submit"
+                    [color]="'primary'"
+                    [disabled]="signInForm.disabled"
+                >
+                    <span *ngIf="!signInForm.disabled">
+                        {{ t("Login") }}
+                    </span>
+                    <mat-progress-spinner
+                        *ngIf="signInForm.disabled"
+                        [diameter]="24"
+                        [mode]="'indeterminate'"
+                    ></mat-progress-spinner>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

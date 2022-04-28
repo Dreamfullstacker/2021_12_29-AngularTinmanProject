@@ -1,0 +1,119 @@
+<div class="flex flex-col flex-auto rounded min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+  <!-- Header -->
+  <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-end py-8 px-6 md:px-8 border-b">
+    <!-- Actions -->
+    <div class="flex flex-shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+      <!-- Search -->
+      <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded min-w-60">
+        <mat-icon
+          class="icon-size-5"
+          matPrefix
+          [svgIcon]="'heroicons_solid:search'"></mat-icon>
+        <input
+          matInput
+          [formControl]="searchInputControl"
+          [autocomplete]="'off'"
+          [placeholder]="'Search relations'">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="relative flex flex-auto overflow-hidden">
+
+    <!-- Relations list -->
+    <div class="flex flex-col flex-auto overflow-hidden sm:overflow-y-auto">
+      <ng-container *ngIf="searchRelations">
+        <ng-container *ngIf="relations.length > 0; else noRelations">
+          <div class="grid">
+            <!-- Header -->
+            <div
+              class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+              matSort
+              matSortDisableClear>
+              <div
+                class="block">
+                Cab
+              </div>
+              <div
+                class="block"
+                [mat-sort-header]="'Abstract'">
+                Description
+              </div>
+              <div
+                class="block">
+                Relationship
+              </div>
+            </div>
+            <!-- Rows -->
+            <ng-container *ngFor="let relation of relations; trackBy: trackByFn">
+              <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                <!-- Cabinet -->
+                <div class="flex items-center">
+                  <app-cabinet-icon 
+                    [size]="1" 
+                    [cabinetClass]="relation.ClassCssClass" 
+                    [cabinetIcon]="relation.ClassIcon"></app-cabinet-icon>
+                </div>
+
+                <!-- Description -->
+                <div class="flex flex-auto items-center">
+                  <a class="hover:underline cursor-pointer" [routerLink]="'/admin/thinq/' + relation.AppDataId">
+                    {{relation.Abstract}} 
+                    {{relation.ClassName === 'Document' ? '' : '(' + relation.RelationshipName + ')'}}
+                  </a>
+                  <button
+                    mat-icon-button 
+                    (click)="downloadDocument(relation.AppDataId)"
+                    *ngIf="relation.ClassName === 'Document'"
+                  >
+                    <mat-icon [svgIcon]="'heroicons_outline:download'"></mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button 
+                    [routerLink]="'/admin/document/view/' + relation.AppDataId"
+                    *ngIf="relation.ClassName === 'Document'"
+                  >
+                    <mat-icon [svgIcon]="'heroicons_outline:eye'"></mat-icon>
+                  </button>
+                </div>
+
+                <!-- Select Relationship -->
+                <div class="flex flex-auto items-center">
+                  <mat-form-field class="fuse-mat-no-subscript fuse-mat-dense">
+                    <mat-select (selectionChange)="setRelation($event.value, relation.AppDataId)">
+                      <mat-option value=""></mat-option>
+                      <mat-option 
+                        *ngFor="let option of relationshipOptions"
+                        [value]="option.RelationshipId"
+                      >
+                        {{ option.RelationshipName }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <mat-paginator
+            class="border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+            [length]="pagination.length"
+            [pageIndex]="pagination.page"
+            [pageSize]="pagination.size"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            [showFirstLastButtons]="true"></mat-paginator>
+
+        </ng-container>
+      </ng-container>
+
+      <ng-template #noRelations>
+        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no relations!</div>
+      </ng-template>
+
+    </div>
+
+  </div>
+
+</div>

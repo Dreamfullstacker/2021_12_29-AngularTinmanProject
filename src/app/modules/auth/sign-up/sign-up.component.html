@@ -1,0 +1,213 @@
+<div
+    class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0"
+    *transloco="let t"
+>
+    <div
+        class="relative hidden bg-cover md:flex flex-auto items-center justify-center w-1/2 h-full p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l"
+        style="
+            background-image: url('https://source.unsplash.com/WEQbe2jBg40/600x1200');
+        "
+    ></div>
+    <div
+        class="md:flex md:items-center md:justify-start col-span-2 sm:w-auto md:h-full lg:w-1/2 my-auto px-4 sm:px-12 md:px-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card"
+    >
+        <div class="col-span-2 max-w-100 sm:w-100 mx-auto sm:mx-0">
+            <!-- Logo -->
+            <!-- <div class="w-12">
+        <img src="assets/images/logo/kqlogo.png">
+      </div> -->
+            <button
+                class="fuse-mat-button-large w-1/2 my-6"
+                mat-flat-button
+                type="button"
+                [color]="'primary'"
+                (click)="onLangChange()"
+            >
+                <span>
+                    {{ language === 'English' ? t("Thai") : t("English") }}
+                </span>
+            </button>
+            <h1 class="text-5xl">{{ t("Sign-Up") }}</h1>
+            <mat-label>
+                Do you have an account?
+                <a
+                    class="text-md font-medium text-primary-500 hover:underline"
+                    routerLink="/sign-in"
+                >
+                    {{t('Login')}}
+                </a>
+            </mat-label>
+            <!-- Alert -->
+            <fuse-alert
+                class="mt-8 -mb-4"
+                *ngIf="showAlert"
+                [appearance]="'outline'"
+                [showIcon]="false"
+                [type]="alert.type"
+                [@shake]="alert.type === 'error'"
+            >
+                {{ alert.message }}
+            </fuse-alert>
+
+            <!-- Sign up form -->
+            <form
+                class="mt-4 grid grid-cols-2 gap-x-2"
+                [formGroup]="signUpForm"
+                (submit)="signUp()"
+                #signUpNgForm="ngForm"
+            >
+            <!-- First name field -->
+                <mat-form-field class="col-span-1">
+                    <mat-label>{{ t("First name") }}</mat-label>
+                    <input
+                        id="firstname"
+                        matInput
+                        [formControlName]="'FirstName'"
+                    />
+                    <mat-error
+                        *ngIf="signUpForm.get('FirstName').hasError('required')"
+                    >
+                        {{ t("First name is required") }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Last name field -->
+                <mat-form-field class="col-span-1">
+                    <mat-label>{{ t("Last name") }}</mat-label>
+                    <input
+                        id="lastname"
+                        matInput
+                        [formControlName]="'LastName'"
+                    />
+                    <mat-error
+                        *ngIf="signUpForm.get('LastName').hasError('required')"
+                    >
+                        {{ t("Last name is required") }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Username field -->
+                <mat-form-field class="col-span-2">
+                    <mat-label>{{ t("Username") }}</mat-label>
+                    <input
+                        id="username"
+                        matInput
+                        [formControlName]="'LoginName'"
+                    />
+                    <mat-error
+                        *ngIf="signUpForm.get('LoginName').hasError('required')"
+                    >
+                        {{ t("Username is required") }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Social Link Id field -->
+                <mat-form-field class="col-span-2">
+                    <mat-label>{{ t("Social Id") }}</mat-label>
+                    <input
+                        id="potalId"
+                        matInput
+                        [formControlName]="'PortalUniqueIdentifier'"
+                    />
+                    <mat-error
+                        *ngIf="signUpForm.get('PortalUniqueIdentifier').hasError('required')"
+                    >
+                        {{ t("Social link id is required") }}
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="col-span-2">
+                    <mat-label>Password</mat-label>
+                    <input
+                        id="password"
+                        matInput
+                        type="password"
+                        [formControlName]="'Password'"
+                        #passwordField
+                    />
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="
+                            passwordField.type === 'password'
+                                ? (passwordField.type = 'text')
+                                : (passwordField.type = 'password')
+                        "
+                        matSuffix
+                    >
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"
+                        ></mat-icon>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"
+                        ></mat-icon>
+                    </button>
+                    <mat-error> Password is required </mat-error>
+                </mat-form-field>
+
+                <!-- Language -->
+                <mat-form-field class="col-span-2">
+                    <mat-label>Language</mat-label>
+                    <mat-select
+                        [placeholder]="'Language'"
+                        [formControlName]="'Language'"
+                    >
+                        <mat-option value="English">English</mat-option>
+                        <mat-option value="Thai">Thai</mat-option>
+                    </mat-select>
+                    <mat-icon
+                        class="icon-size-5"
+                        matPrefix
+                        [svgIcon]="'heroicons_outline:translate'"
+                    ></mat-icon>
+                </mat-form-field>
+
+                <app-location class="grid grid-cols-2 col-span-2"
+                              [form]="signUpForm"
+                              [lang]="language"
+                              [province]="provinceCtrl"
+                              [district]="districtCtrl"
+                              [subDistrict]="subDistrictCtrl">
+                </app-location>
+                <!-- Timezone -->
+                <mat-form-field class="col-span-2">
+                    <mat-label>Timezone</mat-label>
+                    <mat-select
+                        [placeholder]="'Timezone'"
+                        [formControlName]="'TimeZone'"
+                    >
+                        <mat-option value="Asia/Bangkok">Asia/Bangkok</mat-option>
+                    </mat-select>
+                    <mat-icon
+                        class="icon-size-5"
+                        matPrefix
+                        [svgIcon]="'heroicons_outline:clock'"
+                    ></mat-icon>
+                </mat-form-field>
+
+                <!-- Submit button -->
+                <button
+                    class="fuse-mat-button-large w-full my-6"
+                    mat-flat-button
+                    type="submit"
+                    [color]="'primary'"
+                    [disabled]="signUpForm.disabled"
+                >
+                    <span *ngIf="!signUpForm.disabled">
+                        {{ t("Sign-Up") }}
+                    </span>
+                    <mat-progress-spinner
+                        *ngIf="signUpForm.disabled"
+                        [diameter]="24"
+                        [mode]="'indeterminate'"
+                    ></mat-progress-spinner>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

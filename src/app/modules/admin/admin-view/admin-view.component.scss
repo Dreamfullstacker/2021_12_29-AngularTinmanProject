@@ -1,0 +1,27 @@
+.datatable-row{
+  max-height: 2rem;
+  &:hover {
+    background-color: whitesmoke;
+  }
+}
+
+tr.mat-row {
+  height: 2rem !important;
+}
+
+.mat-cell>div {
+  max-height: 2rem !important;
+  height: 2rem;
+  overflow: hidden;
+}
+
+.table-loading-shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 11;
+  display: flex;
+}
+.visible-menu {
+  max-height: 300px;
+}

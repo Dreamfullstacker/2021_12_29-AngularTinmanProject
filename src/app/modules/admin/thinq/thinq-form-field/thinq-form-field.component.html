@@ -1,0 +1,73 @@
+<ng-container [ngSwitch]="arrField.Type">
+    <ng-container *ngSwitchCase="'txt'">
+        <app-thinq-field-txt
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-txt>
+    </ng-container>
+    <ng-container *ngSwitchCase="'txa'"> 
+        <app-thinq-field-txa
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-txa>
+    </ng-container>
+    <ng-container *ngSwitchCase="'txl'">
+        <app-thinq-field-txl
+            [control]="control"
+            [arrField]="arrField"
+            [txlIdField]="txlIdField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-txl>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ddl'"> 
+        <app-thinq-field-ddl
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-ddl>
+    </ng-container>
+    <ng-container *ngSwitchCase="'email'"> 
+        <app-thinq-field-email
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-email>
+    </ng-container>
+    <ng-container *ngSwitchCase="'htm'"> 
+        <app-thinq-field-htm
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-htm>
+    </ng-container>
+    <ng-container *ngSwitchCase="'dte'"> 
+        <app-thinq-field-dte
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-dte>
+    </ng-container>
+    <ng-container *ngSwitchCase="'cbo'"> 
+        <app-thinq-field-chk
+            [control]="control"
+            [arrField]="arrField"
+        > </app-thinq-field-chk>
+    </ng-container>
+    <ng-container *ngSwitchCase="'toggle'"> 
+        <app-thinq-field-toggle
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-toggle>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+        <app-thinq-field-txt
+            [control]="control"
+            [arrField]="arrField"
+            [labelVisibility]="labelVisibility"
+        > </app-thinq-field-txt>
+    </ng-container>
+  </ng-container>
+  
